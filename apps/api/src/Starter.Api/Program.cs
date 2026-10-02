@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Starter.Api.Auth;
 using Starter.Api.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,16 +12,22 @@ var connectionString = builder.Configuration.GetConnectionString("Default")
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 builder.Services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
+builder.Services.AddSupabaseAuth();
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.MapOpenApi().AllowAnonymous();
 }
 
-app.MapGet("/", () => Results.Ok(new { message = "Hello world" }));
-app.MapHealthChecks("/health");
+app.UseAuthentication();
+app.UseAuthorization();
+
+// Everything requires a signed-in user unless it opts out (fallback policy in AddSupabaseAuth).
+app.MapGet("/", () => Results.Ok(new { message = "Hello world" })).AllowAnonymous();
+app.MapHealthChecks("/health").AllowAnonymous();
+app.MapGet("/me", (ClaimsPrincipal user) => TypedResults.Ok(new { id = user.FindFirstValue("sub") }));
 
 app.Run();
 

@@ -4,11 +4,11 @@ Phase 0 walking skeleton for the "serious SaaS / marketplace" default stack: a N
 
 ## Layout
 
-| Path                 | What                                                                                         |
-| -------------------- | -------------------------------------------------------------------------------------------- |
-| `apps/web`           | Next.js (App Router), Tailwind, shadcn/ui, Zod, Vitest, Playwright                           |
-| `apps/api`           | ASP.NET Core minimal API, EF Core + Npgsql, OpenAPI, health check, xUnit v3 + Testcontainers |
-| `docker-compose.yml` | Local Postgres for the API                                                                   |
+| Path                 | What                                                                                                            |
+| -------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `apps/web`           | Next.js (App Router), Tailwind, shadcn/ui, Zod, Vitest, Playwright                                              |
+| `apps/api`           | ASP.NET Core minimal API, EF Core + Npgsql, OpenAPI, health check, Supabase JWT auth, xUnit v3 + Testcontainers |
+| `docker-compose.yml` | Local Postgres for the API                                                                                      |
 
 ## Create a project from it
 
@@ -39,7 +39,8 @@ Then:
 
 ## What's included
 
-- Fail-fast config: the API throws on start without `ConnectionStrings:Default`, and the web app validates `API_URL` at server start (`apps/web/src/instrumentation.ts`).
+- Deny-by-default auth: the API validates Supabase Auth JWTs (issuer `<Supabase:Url>/auth/v1`, audience `authenticated`, keys from its JWKS). Every endpoint requires a signed-in user unless it calls `.AllowAnonymous()`; `/me` is the example protected endpoint.
+- Fail-fast config: the API throws on start without `ConnectionStrings:Default` or `Supabase:Url` (env var `Supabase__Url`; local default is `supabase start` on port 54321), and the web app validates `API_URL` at server start (`apps/web/src/instrumentation.ts`).
 - CI with a job per app, and Dependabot for npm, NuGet and Actions.
 - A pre-commit hook that runs lint-staged (auto-fix only, no tests). C# files get `dotnet format whitespace`.
 - `apps/web/AGENTS.md` holds only the Next.js agent rules block. project-starter's agents-md step writes the root `AGENTS.md`.
