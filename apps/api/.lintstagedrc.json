@@ -1,3 +1,4 @@
 {
-  "*.cs": "dotnet format whitespace --folder --include"
+  "*.cs": "dotnet format whitespace --folder --include",
+  "*.{json,md,yml}": "prettier --write"
 }
