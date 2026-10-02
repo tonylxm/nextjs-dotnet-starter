@@ -6,9 +6,7 @@ namespace Starter.Api.Tests;
 
 public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly PostgreSqlContainer _db = new PostgreSqlBuilder()
-        .WithImage("postgres:18-alpine")
-        .Build();
+    private readonly PostgreSqlContainer _db = new PostgreSqlBuilder("postgres:18-alpine").Build();
 
     public async ValueTask InitializeAsync() => await _db.StartAsync();
 
