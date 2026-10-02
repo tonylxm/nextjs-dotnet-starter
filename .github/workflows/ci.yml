@@ -42,4 +42,4 @@ jobs:
       - run: dotnet format Starter.slnx --verify-no-changes
       - run: dotnet build Starter.slnx --configuration Release
       # Integration tests start Postgres with Testcontainers (Docker is on the runner).
-      - run: dotnet test Starter.slnx --no-build --configuration Release
+      - run: dotnet test --solution Starter.slnx --no-build --configuration Release
