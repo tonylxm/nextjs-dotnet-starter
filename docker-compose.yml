@@ -1,0 +1,15 @@
+# Local Postgres for apps/api. Matches the connection string in appsettings.Development.json.
+services:
+  db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: starter
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql
+
+volumes:
+  db-data:

@@ -1,0 +1,25 @@
+{
+  "name": "nextjs-dotnet-starter",
+  "private": true,
+  "scripts": {
+    "prepare": "husky",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "pnpm --filter web lint",
+    "typecheck": "pnpm --filter web typecheck",
+    "test": "pnpm --filter web test",
+    "test:e2e": "pnpm --filter web test:e2e",
+    "build": "pnpm --filter web build",
+    "dev": "pnpm --filter web dev"
+  },
+  "lint-staged": {
+    "*.{json,md,css,yml}": "prettier --write"
+  },
+  "packageManager": "pnpm@12.8.1",
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.9",
+    "prettier-plugin-tailwindcss": "^0.8.1"
+  }
+}
